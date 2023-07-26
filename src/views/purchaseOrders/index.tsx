@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Button, Grid, Stack } from "@mui/material";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { DataGrid } from "@mui/x-data-grid";
-import CreatePurchase from "./createPurchase";
-import { CreatePurchaseProvider } from "../../context/createPurchaseContext";
+import CreatePurchaseOrder from "./createPurchaseOrder";
+import { CreatePurchaseOrderProvider } from "../../context/createPurchaseContext";
 
 const PurchaseOrders = () => {
   const [loading, setLoading] = useState(false);
@@ -53,17 +53,12 @@ const PurchaseOrders = () => {
           pagination: { paginationModel: { pageSize: 10 } },
         }}
       />
-      <CreatePurchaseProvider>
-        <CreatePurchase
+      <CreatePurchaseOrderProvider>
+        <CreatePurchaseOrder
           open={openCreate}
-          onClose={() => {
-            setOpenCreate(false);
-          }}
-          handleClose={() => {
-            setOpenCreate(false);
-          }}
+          onClose={() => setOpenCreate(false)}
         />
-      </CreatePurchaseProvider>
+      </CreatePurchaseOrderProvider>
     </div>
   )
 }

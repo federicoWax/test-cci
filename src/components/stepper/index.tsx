@@ -1,26 +1,33 @@
 
-import { ReactNode } from "react";
-import { useCreatePurchase } from "../../context/createPurchaseContext";
+import { ReactNode, FC, Dispatch, SetStateAction } from "react";
 import { Stepper as Ste, Step, StepLabel, Grid, Button } from "@mui/material";
 import { NavigateNext, NavigateBefore } from '@mui/icons-material';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+
+interface Props {
+  children: ReactNode;
+  activeStep?: number;
+  setActiveStep: Dispatch<SetStateAction<number | undefined>>;
+  onNext: () => void;
+  onFinish: () => void;
+}
 
 const steps = [
   'Información General',
   'Productos'
 ];
 
-const Stepper = ({ children }: { children: ReactNode }) => {
-  const { activeStep, setActiveStep } = useCreatePurchase();
-
+const Stepper: FC<Props> = ({ children, activeStep, setActiveStep, onNext, onFinish }) => {
   return (
     <>
+      <br />
       <Ste activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel><b>{label}</b></StepLabel>
-          </Step>
-        ))}
+        {
+          steps.map((label) => (
+            <Step key={label}>
+              <StepLabel><b>{label}</b></StepLabel>
+            </Step>
+          ))
+        }
       </Ste>
       {children}
       <br />
@@ -31,7 +38,9 @@ const Stepper = ({ children }: { children: ReactNode }) => {
               variant="contained"
               color="primary"
               endIcon={<NavigateNext />}
-              onClick={() => setActiveStep(1)}
+              onClick={() => {
+                onNext();
+              }}
             >
               Siguiente
             </Button>
@@ -51,7 +60,7 @@ const Stepper = ({ children }: { children: ReactNode }) => {
                   <Button
                     variant="contained"
                     color="primary"
-                    endIcon={<ShoppingCartIcon />}
+                    onClick={onFinish}
                   >
                     Finalizar
                   </Button>

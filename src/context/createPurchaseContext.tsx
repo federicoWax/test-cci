@@ -1,21 +1,23 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from "react";
+import { createContext, createRef, Dispatch, MutableRefObject, ReactNode, RefObject, SetStateAction, useContext, useRef, useState } from "react";
 
-interface CreatePurchaseContextData {
+interface CreatePurchaseOrderContextData {
   activeStep?: number;
   setActiveStep: Dispatch<SetStateAction<number | undefined>>;
+  refButtonCreateForm?: RefObject<HTMLButtonElement>;
 }
 
-const CreatePurchaseContext = createContext<CreatePurchaseContextData>({
-  setActiveStep: () => false,
+const CreatePurchaseOrderContext = createContext<CreatePurchaseOrderContextData>({
+  setActiveStep: () => false
 });
 
-export const CreatePurchaseProvider = ({ children }: { children: ReactNode }) => {
+export const CreatePurchaseOrderProvider = ({ children }: { children: ReactNode }) => {
   const [activeStep, setActiveStep] = useState<number | undefined>();
+  const refButtonCreateForm = createRef<HTMLButtonElement>();
 
-  return <CreatePurchaseContext.Provider value={{ activeStep, setActiveStep }}>
+  return <CreatePurchaseOrderContext.Provider value={{ activeStep, setActiveStep, refButtonCreateForm }}>
     {children}
-  </CreatePurchaseContext.Provider>;
+  </CreatePurchaseOrderContext.Provider>;
 }
 
-export const useCreatePurchase = () => useContext(CreatePurchaseContext);
+export const useCreatePurchaseOrder = () => useContext(CreatePurchaseOrderContext);
 
