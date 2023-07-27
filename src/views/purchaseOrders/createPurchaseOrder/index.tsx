@@ -5,6 +5,7 @@ import { TransitionProps } from "@mui/material/transitions";
 import { DeleteForever, Close } from '@mui/icons-material';
 import FormCreatePurchase from "./formCreatePurchase";
 import { useCreatePurchaseOrder } from "../../../context/createPurchaseContext";
+import ProductsCreatePurchase from "./productsCreatePurchase";
 
 interface Props extends DialogProps {
   onClose: () => void;
@@ -23,7 +24,7 @@ const CreatePurchaseOrder: FC<Props> = (props) => {
   const { activeStep, setActiveStep, refButtonCreateForm } = useCreatePurchaseOrder();
 
   return (
-    <Dialog fullWidth maxWidth="lg" {...props} TransitionComponent={Transition}>
+    <Dialog fullWidth maxWidth="lg" TransitionComponent={Transition} {...props}>
       <DialogTitle>
         CREAR ORDEN DE COMPRA
         <IconButton
@@ -32,7 +33,7 @@ const CreatePurchaseOrder: FC<Props> = (props) => {
             position: 'absolute',
             right: 8,
             top: 8,
-            color: (theme) => theme.palette.grey[500],
+            color: (theme) => theme.palette.grey[500]
           }}
         >
           <Close />
@@ -49,10 +50,8 @@ const CreatePurchaseOrder: FC<Props> = (props) => {
             <Card style={{ margin: 20, padding: 20 }}>
               {
                 !activeStep
-                  ? <FormCreatePurchase
-                    onSubmit={() => setActiveStep(1)}
-                  />
-                  : <div>productos</div>
+                  ? <FormCreatePurchase />
+                  : <ProductsCreatePurchase />
               }
             </Card>
           </Grid>

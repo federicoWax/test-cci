@@ -1,20 +1,22 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import { PurchaseOrder } from "../../../../interfaces/purchaseOrder";
-import { TextField, Button, Stack, Grid } from "@mui/material";
-import { useCreatePurchaseOrder } from "../../../../context/createPurchaseContext";
 import dayjs from "dayjs";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { TextField, Button, Stack, Grid } from "@mui/material";
+import { PurchaseOrder } from "../../../../interfaces/purchaseOrder";
+import { useCreatePurchaseOrder } from "../../../../context/createPurchaseContext";
+import { maxLength } from "../../../../constans";
 
-const FormCreatePurchase = ({ onSubmit: onSubmitProp }: { onSubmit: () => void }) => {
-  const { refButtonCreateForm } = useCreatePurchaseOrder();
-  const { register, handleSubmit, formState: { errors } } = useForm<PurchaseOrder>();
+const FormCreatePurchase = () => {
+  const { setActiveStep, refButtonCreateForm, purchaseOrder, setPurchaseOrder } = useCreatePurchaseOrder();
+  const { register, handleSubmit, formState: { errors } } = useForm<PurchaseOrder>({
+    defaultValues: purchaseOrder
+  });
 
-  console.error(errors);
-
-  const onSubmit: SubmitHandler<PurchaseOrder> = data => {
+  const onSubmit: SubmitHandler<PurchaseOrder> = _purchaseOrder => {
     if (Object.keys(errors).length > 0) return;
 
-    onSubmitProp();
-  };
+    setPurchaseOrder(_purchaseOrder);
+    setActiveStep(1);
+  }
 
   return (
     <Stack
@@ -25,8 +27,11 @@ const FormCreatePurchase = ({ onSubmit: onSubmitProp }: { onSubmit: () => void }
       onSubmit={handleSubmit(onSubmit)}
     >
       <Grid container spacing={2}>
-        <Grid item xs={12}>
-          Fecha: {dayjs().format("DD/MM/YYYY hh:mm a")}
+        <Grid item xs={3}>
+          Fecha:
+        </Grid>
+        <Grid item xs={9}>
+          {dayjs(purchaseOrder.date).format("DD/MM/YYYY hh:mm a")}
         </Grid>
         <Grid item xs={12} md={3}>
           <label>Nombre del cliente:</label>
@@ -34,7 +39,13 @@ const FormCreatePurchase = ({ onSubmit: onSubmitProp }: { onSubmit: () => void }
         <Grid item xs={12} md={9}>
           <TextField
             fullWidth
-            {...register("client", { required: "El nombre del cliente es requerido." })}
+            {...register(
+              "client",
+              {
+                required: "El nombre del cliente es requerido.",
+                maxLength
+              }
+            )}
             error={Boolean(errors.client)}
             helperText={errors.client?.message}
           />
@@ -45,7 +56,13 @@ const FormCreatePurchase = ({ onSubmit: onSubmitProp }: { onSubmit: () => void }
         <Grid item xs={12} md={9}>
           <TextField
             fullWidth multiline rows={4}
-            {...register("address", { required: "La dirección es requerida." })}
+            {...register(
+              "address",
+              {
+                required: "La dirección es requerida.",
+                maxLength
+              }
+            )}
             error={Boolean(errors.address)}
             helperText={errors.address?.message}
           />
@@ -55,9 +72,7 @@ const FormCreatePurchase = ({ onSubmit: onSubmitProp }: { onSubmit: () => void }
         type="submit"
         style={{ display: "none" }}
         ref={refButtonCreateForm}
-      >
-        GUARDAR
-      </Button>
+      />
     </Stack>
   )
 }
