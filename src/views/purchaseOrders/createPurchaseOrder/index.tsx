@@ -18,7 +18,8 @@ const Transition = forwardRef(function Transition(
 });
 
 const CreatePurchaseOrder = () => {
-  const { activeStep, setActiveStep, refButtonCreateOrder, refButtonFinish, setPurchaseOrder, openCreate, setOpenCreate } = useCreatePurchaseOrder();
+  const { activeStep, setActiveStep, refButtonCreateOrder, refButtonFinish, setPurchaseOrder, openCreate, setOpenCreate, formOrderProducts } = useCreatePurchaseOrder();
+  const { reset } = formOrderProducts!;
 
   return (
     <Dialog open={openCreate} fullWidth maxWidth="lg" TransitionComponent={Transition}>

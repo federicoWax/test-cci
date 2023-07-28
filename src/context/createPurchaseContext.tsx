@@ -48,6 +48,7 @@ export const CreatePurchaseOrderProvider = ({ children }: { children: ReactNode 
     defaultValues: purchaseOrder.products
   });
   const [addPurchaseOrder, { loading: savingMutation }] = useMutation<Response>(CREATE_PURCHASE_ORDER);
+  const { reset } = formOrderProducts;
 
   const onFinish = async (products: OrderProduct[]) => {
     if (savingMutation) return;
@@ -79,6 +80,7 @@ export const CreatePurchaseOrderProvider = ({ children }: { children: ReactNode 
 
       setOpenCreate(false);
       setPurchaseOrder(initPurchaseOrder);
+      setActiveStep(undefined);
       setMessageSuccess("Orden de compra guardada con éxito.");
       setTimeout(() => {
         setMessageSuccess("");

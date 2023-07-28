@@ -10,7 +10,7 @@ import { stringToNumber } from "../../../../utils/functions";
 
 const ProductsCreatePurchase = () => {
   const { purchaseOrder, setPurchaseOrder, setError, refButtonFinish, onFinish, formOrderProducts } = useCreatePurchaseOrder();
-  const { register, handleSubmit, formState: { errors }, watch } = formOrderProducts!;
+  const { register, handleSubmit, formState: { errors }, watch, resetField } = formOrderProducts!;
   const products = watch();
 
   const onSubmit: SubmitHandler<OrderProduct[]> = _products => {
@@ -104,8 +104,8 @@ const ProductsCreatePurchase = () => {
       headerName: 'Total',
       width: 200,
       renderCell: (params: GridRenderCellParams<OrderProduct>) => {
-        const price = stringToNumber(products[params.row.id as number]?.price.toString());
-        const quantity = stringToNumber(products[params.row.id as number]?.quantity.toString());
+        const price = stringToNumber(products[params.row.id as number]?.price?.toString());
+        const quantity = stringToNumber(products[params.row.id as number]?.quantity?.toString());
         const subtotal = price * quantity;
         const total = subtotal + (subtotal * 0.16);
 
@@ -146,7 +146,16 @@ const ProductsCreatePurchase = () => {
       return;
     }
 
-    setPurchaseOrder({ ...purchaseOrder, products: [...purchaseOrder.products, { product: '', quantity: 0, price: 0, total: 0 }] });
+    setPurchaseOrder(p => ({ ...p, products: [...p.products, { product: '', quantity: 0, price: 0, total: 0 }] }));
+
+    if (!purchaseOrder.products.length) {
+      const n = 0;
+
+      resetField(`${n}.product`);
+      resetField(`${n}.quantity`);
+      resetField(`${n}.price`);
+      resetField(`${n}.total`);
+    }
   }
 
   return (
