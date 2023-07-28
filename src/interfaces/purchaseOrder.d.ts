@@ -4,8 +4,8 @@ export interface PurchaseOrder {
   readonly date: Date;
   client: string;
   address: string;
-  subtotal: number;
-  tax: number;
+  subtotal?: number;
+  tax?: number;
   total: number;
   products: OrderProduct[];
 }

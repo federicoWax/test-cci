@@ -22,7 +22,7 @@ const TablePurchaseOrders: FC<Props> = ({ loading }) => {
       slots={{
         noRowsOverlay: () => (
           <Stack height="100%" alignItems="center" justifyContent="center">
-            Sin ordenes de compra.
+            Sin órdenes de compra.
           </Stack>
         ),
       }}

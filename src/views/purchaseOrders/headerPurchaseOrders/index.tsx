@@ -10,7 +10,7 @@ const HeaderPurchaseOrders: FC<Props> = ({ setOpenCreate }) => {
   return (
     <Grid container alignItems="center">
       <Grid item xs={12} md={10}>
-        <h1>LISTA ORDENES DE COMPRA</h1>
+        <h1>LISTA ÓRDENES DE COMPRA</h1>
       </Grid>
       <Grid item xs={12} md={2}>
         <Button

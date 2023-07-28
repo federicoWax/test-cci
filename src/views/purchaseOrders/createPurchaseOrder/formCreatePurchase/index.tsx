@@ -6,7 +6,7 @@ import { useCreatePurchaseOrder } from "../../../../context/createPurchaseContex
 import { maxLength } from "../../../../constans";
 
 const FormCreatePurchase = () => {
-  const { setActiveStep, refButtonCreateForm, purchaseOrder, setPurchaseOrder } = useCreatePurchaseOrder();
+  const { setActiveStep, refButtonCreateOrder, purchaseOrder, setPurchaseOrder } = useCreatePurchaseOrder();
   const { register, handleSubmit, formState: { errors } } = useForm<PurchaseOrder>({
     defaultValues: purchaseOrder
   });
@@ -71,7 +71,7 @@ const FormCreatePurchase = () => {
       <Button
         type="submit"
         style={{ display: "none" }}
-        ref={refButtonCreateForm}
+        ref={refButtonCreateOrder}
       />
     </Stack>
   )

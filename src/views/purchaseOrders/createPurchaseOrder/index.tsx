@@ -6,6 +6,7 @@ import { DeleteForever, Close } from '@mui/icons-material';
 import FormCreatePurchase from "./formCreatePurchase";
 import { useCreatePurchaseOrder } from "../../../context/createPurchaseContext";
 import ProductsCreatePurchase from "./productsCreatePurchase";
+import { initPurchaseOrder } from "../../../constans";
 
 interface Props extends DialogProps {
   onClose: () => void;
@@ -21,7 +22,7 @@ const Transition = forwardRef(function Transition(
 });
 
 const CreatePurchaseOrder: FC<Props> = (props) => {
-  const { activeStep, setActiveStep, refButtonCreateForm } = useCreatePurchaseOrder();
+  const { activeStep, setActiveStep, refButtonCreateOrder, refButtonFinish, setPurchaseOrder } = useCreatePurchaseOrder();
 
   return (
     <Dialog fullWidth maxWidth="lg" TransitionComponent={Transition} {...props}>
@@ -43,8 +44,8 @@ const CreatePurchaseOrder: FC<Props> = (props) => {
         <Stepper
           activeStep={activeStep}
           setActiveStep={setActiveStep}
-          onNext={() => refButtonCreateForm?.current?.click()}
-          onFinish={() => { }}
+          onNext={() => refButtonCreateOrder?.current?.click()}
+          onFinish={() => refButtonFinish?.current?.click()}
         >
           <Grid container justifyContent="center">
             <Card style={{ margin: 20, padding: 20 }}>
@@ -60,10 +61,14 @@ const CreatePurchaseOrder: FC<Props> = (props) => {
       <br />
       <DialogActions>
         <Button
-          onClick={props.onClose}
+          onClick={() => {
+            setActiveStep(undefined);
+            setPurchaseOrder(initPurchaseOrder);
+            props.onClose();
+          }}
           color="warning"
           variant="contained"
-          endIcon={<DeleteForever />}
+          startIcon={<DeleteForever />}
         >
           Cancelar orden
         </Button>
