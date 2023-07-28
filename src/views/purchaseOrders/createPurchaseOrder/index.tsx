@@ -22,7 +22,7 @@ const Transition = forwardRef(function Transition(
 });
 
 const CreatePurchaseOrder: FC<Props> = (props) => {
-  const { activeStep, setActiveStep, refButtonCreateOrder, refButtonFinish, setPurchaseOrder } = useCreatePurchaseOrder();
+  const { activeStep, setActiveStep, refButtonCreateOrder, refButtonFinish, setPurchaseOrder, onFinish } = useCreatePurchaseOrder();
 
   return (
     <Dialog fullWidth maxWidth="lg" TransitionComponent={Transition} {...props}>

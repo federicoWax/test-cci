@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { Button, Grid, Stack, TextField } from "@mui/material";
 import { useCreatePurchaseOrder } from "../../../../context/createPurchaseContext";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
@@ -8,11 +8,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { maxLength } from "../../../../constans";
 
 const ProductsCreatePurchase = () => {
-  const { purchaseOrder, setPurchaseOrder, setError, refButtonFinish, onFinish } = useCreatePurchaseOrder();
-  const { register, handleSubmit, formState: { errors }, watch } = useForm<OrderProduct[]>({
-    defaultValues: []
-  });
-
+  const { purchaseOrder, setPurchaseOrder, setError, refButtonFinish, onFinish, formOrderProducts } = useCreatePurchaseOrder();
+  const { register, handleSubmit, formState: { errors }, watch } = formOrderProducts!;
   const products = watch();
 
   const onSubmit: SubmitHandler<OrderProduct[]> = _purchaseOrder => {
@@ -57,6 +54,14 @@ const ProductsCreatePurchase = () => {
             `${params.id as number}.quantity`,
             {
               required: "Cantidad requerida.",
+              min: {
+                message: "Canitdad minima 1.",
+                value: 1
+              },
+              max: {
+                message: "Cantidad máxima 100.",
+                value: 100
+              }
             }
           )}
           error={Boolean(errors[params.id as number]?.quantity)}
@@ -78,6 +83,14 @@ const ProductsCreatePurchase = () => {
             `${params.id as number}.price`,
             {
               required: "Precio requerido.",
+              min: {
+                message: "Precio minimo 1.",
+                value: 1
+              },
+              max: {
+                message: "Precio máximo 1000.",
+                value: 1000
+              }
             }
           )}
           error={Boolean(errors[params.id as number]?.price)}
@@ -90,8 +103,8 @@ const ProductsCreatePurchase = () => {
       headerName: 'Total',
       width: 200,
       renderCell: (params: GridRenderCellParams<OrderProduct>) => {
-        const price = products[params.row.id as number].price;
-        const quantity = products[params.row.id as number].quantity;
+        const price = products[params.row.id as number]?.price || 0;
+        const quantity = products[params.row.id as number]?.quantity || 0;
         const subtotal = price * quantity;
         const total = subtotal + (subtotal * 0.16);
 
@@ -120,7 +133,7 @@ const ProductsCreatePurchase = () => {
         </Button>
       ),
     }
-  ], [setPurchaseOrder, errors, products]);
+  ], [setPurchaseOrder, errors, products, register]);
 
   const addProduct = () => {
     if (purchaseOrder.products.length === 10) {

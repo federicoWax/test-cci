@@ -1,7 +1,8 @@
 import { createContext, createRef, Dispatch, ReactNode, RefObject, SetStateAction, useContext, useState } from "react";
-import { PurchaseOrder } from "../interfaces/purchaseOrder";
+import { OrderProduct, PurchaseOrder } from "../interfaces/purchaseOrder";
 import { initPurchaseOrder } from "../constans";
 import Alert from "../components/alert";
+import { useForm, UseFormReturn } from "react-hook-form";
 
 interface CreatePurchaseOrderContextData {
   activeStep?: number;
@@ -13,6 +14,7 @@ interface CreatePurchaseOrderContextData {
   onFinish: () => void;
   error: string;
   setError: Dispatch<SetStateAction<string>>;
+  formOrderProducts?: UseFormReturn<OrderProduct[], any, undefined>;
 }
 
 const CreatePurchaseOrderContext = createContext<CreatePurchaseOrderContextData>({
@@ -21,7 +23,7 @@ const CreatePurchaseOrderContext = createContext<CreatePurchaseOrderContextData>
   purchaseOrder: initPurchaseOrder,
   onFinish: () => { },
   error: "",
-  setError: () => ""
+  setError: () => "",
 });
 
 export const CreatePurchaseOrderProvider = ({ children }: { children: ReactNode }) => {
@@ -30,6 +32,9 @@ export const CreatePurchaseOrderProvider = ({ children }: { children: ReactNode 
   const [error, setError] = useState<string>("");
   const refButtonCreateOrder = createRef<HTMLButtonElement>();
   const refButtonFinish = createRef<HTMLButtonElement>();
+  const formOrderProducts = useForm<OrderProduct[]>({
+    defaultValues: purchaseOrder.products
+  });
 
   const onFinish = async () => {
     if (!purchaseOrder.products.length) {
@@ -40,15 +45,6 @@ export const CreatePurchaseOrderProvider = ({ children }: { children: ReactNode 
 
       return;
     }
-
-    /*  if (purchaseOrder.products.some(product => product.quantity < 1 || product.price < 1)) {
-       setError("Los precios y cantidades deben ser mayores a 0.");
-       setTimeout(() => {
-         setError("");
-       }, 4000);
- 
-       return;
-     } */
   }
 
   return <CreatePurchaseOrderContext.Provider
@@ -61,7 +57,8 @@ export const CreatePurchaseOrderProvider = ({ children }: { children: ReactNode 
       setPurchaseOrder,
       onFinish,
       error,
-      setError
+      setError,
+      formOrderProducts
     }}
   >
     {children}
