@@ -14,7 +14,13 @@ export interface OrderProduct {
   readonly id?: string | number;
   readonly orderNumber?: number;
   product: string;
-  quantity: number;
-  price: number;
+  quantity: number | string;
+  price: number | string;
   total: number; //es con iva
 }
+
+export type PurchaseOrderInput = Omit<PurchaseOrder, "id" | "orderNumber" | "date" | "subtotal" | "tax" | "products" | "total"> & {
+  products: OrderProductInput[];
+};
+
+export type OrderProductInput = Omit<OrderProduct, "id" | "orderNumber" | "total">;

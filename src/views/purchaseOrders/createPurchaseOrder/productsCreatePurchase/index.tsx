@@ -6,16 +6,17 @@ import { OrderProduct } from "../../../../interfaces/purchaseOrder";
 import { Add, DeleteForever } from '@mui/icons-material';
 import { SubmitHandler } from "react-hook-form";
 import { maxLength } from "../../../../constans";
+import { stringToNumber } from "../../../../utils/functions";
 
 const ProductsCreatePurchase = () => {
   const { purchaseOrder, setPurchaseOrder, setError, refButtonFinish, onFinish, formOrderProducts } = useCreatePurchaseOrder();
   const { register, handleSubmit, formState: { errors }, watch } = formOrderProducts!;
   const products = watch();
 
-  const onSubmit: SubmitHandler<OrderProduct[]> = _purchaseOrder => {
+  const onSubmit: SubmitHandler<OrderProduct[]> = _products => {
     if (Object.keys(errors).length > 0) return;
 
-    onFinish();
+    onFinish(Object.values(_products).map(p => ({ ...p, price: stringToNumber(p.price.toString()), quantity: stringToNumber(p.quantity.toString()) })));
   }
 
   const columns = useMemo<GridColDef[]>(() => [
@@ -103,8 +104,8 @@ const ProductsCreatePurchase = () => {
       headerName: 'Total',
       width: 200,
       renderCell: (params: GridRenderCellParams<OrderProduct>) => {
-        const price = products[params.row.id as number]?.price || 0;
-        const quantity = products[params.row.id as number]?.quantity || 0;
+        const price = stringToNumber(products[params.row.id as number]?.price.toString());
+        const quantity = stringToNumber(products[params.row.id as number]?.quantity.toString());
         const subtotal = price * quantity;
         const total = subtotal + (subtotal * 0.16);
 

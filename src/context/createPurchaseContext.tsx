@@ -1,10 +1,11 @@
 import { createContext, createRef, Dispatch, ReactNode, RefObject, SetStateAction, useContext, useEffect, useState } from "react";
-import { OrderProduct, PurchaseOrder } from "../interfaces/purchaseOrder";
+import { OrderProduct, PurchaseOrder, PurchaseOrderInput } from "../interfaces/purchaseOrder";
 import { initPurchaseOrder } from "../constans";
 import Alert from "../components/alert";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { useMutation } from "@apollo/client";
 import { CREATE_PURCHASE_ORDER } from "../apolloClient/mutations";
+import { GET_PURCHASE_ORDERS } from "../apolloClient/querys";
 
 interface CreatePurchaseOrderContextData {
   openCreate: boolean;
@@ -15,7 +16,7 @@ interface CreatePurchaseOrderContextData {
   refButtonFinish?: RefObject<HTMLButtonElement>;
   purchaseOrder: PurchaseOrder;
   setPurchaseOrder: Dispatch<SetStateAction<PurchaseOrder>>;
-  onFinish: () => void;
+  onFinish: (products: OrderProduct[]) => void;
   error: string;
   setError: Dispatch<SetStateAction<string>>;
   formOrderProducts?: UseFormReturn<OrderProduct[], any, undefined>;
@@ -46,13 +47,13 @@ export const CreatePurchaseOrderProvider = ({ children }: { children: ReactNode 
   const formOrderProducts = useForm<OrderProduct[]>({
     defaultValues: purchaseOrder.products
   });
-  const [addPurchaseOrder, { loading: savingMutation }] = useMutation<Response, PurchaseOrder>(CREATE_PURCHASE_ORDER);
+  const [addPurchaseOrder, { loading: savingMutation }] = useMutation<Response>(CREATE_PURCHASE_ORDER);
 
-  const onFinish = async () => {
+  const onFinish = async (products: OrderProduct[]) => {
     if (savingMutation) return;
 
     if (!purchaseOrder.products.length) {
-      setError("Necesita agregar por lo menos 1 producto a la orden.");
+      setError("La orden no tiene productos.");
       setTimeout(() => {
         setError("");
       }, 4000);
@@ -64,10 +65,16 @@ export const CreatePurchaseOrderProvider = ({ children }: { children: ReactNode 
 
     try {
       await addPurchaseOrder({
-        variables: purchaseOrder,
-        onQueryUpdated(observableQuery) {
-          return observableQuery.refetch();
-        }
+        variables: {
+          order: {
+            client: purchaseOrder.client,
+            address: purchaseOrder.address,
+            products: products.map(p => ({ product: p.product, quantity: p.quantity, price: p.price }))
+          }
+        },
+        refetchQueries: [
+          { query: GET_PURCHASE_ORDERS }
+        ]
       });
 
       setOpenCreate(false);
