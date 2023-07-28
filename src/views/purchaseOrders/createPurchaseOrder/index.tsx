@@ -1,5 +1,5 @@
 import { FC, forwardRef } from "react";
-import { Button, Card, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, Grid, IconButton, Slide } from "@mui/material";
+import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Slide } from "@mui/material";
 import Stepper from "../../../components/stepper";
 import { TransitionProps } from "@mui/material/transitions";
 import { DeleteForever, Close } from '@mui/icons-material';
@@ -7,10 +7,6 @@ import FormCreatePurchase from "./formCreatePurchase";
 import { useCreatePurchaseOrder } from "../../../context/createPurchaseContext";
 import ProductsCreatePurchase from "./productsCreatePurchase";
 import { initPurchaseOrder } from "../../../constans";
-
-interface Props extends DialogProps {
-  onClose: () => void;
-}
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -21,15 +17,15 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const CreatePurchaseOrder: FC<Props> = (props) => {
-  const { activeStep, setActiveStep, refButtonCreateOrder, refButtonFinish, setPurchaseOrder, onFinish } = useCreatePurchaseOrder();
+const CreatePurchaseOrder = () => {
+  const { activeStep, setActiveStep, refButtonCreateOrder, refButtonFinish, setPurchaseOrder, openCreate, setOpenCreate } = useCreatePurchaseOrder();
 
   return (
-    <Dialog fullWidth maxWidth="lg" TransitionComponent={Transition} {...props}>
+    <Dialog open={openCreate} fullWidth maxWidth="lg" TransitionComponent={Transition}>
       <DialogTitle>
         CREAR ORDEN DE COMPRA
         <IconButton
-          onClick={props.onClose}
+          onClick={() => setOpenCreate(false)}
           sx={{
             position: 'absolute',
             right: 8,
@@ -64,7 +60,7 @@ const CreatePurchaseOrder: FC<Props> = (props) => {
           onClick={() => {
             setActiveStep(undefined);
             setPurchaseOrder(initPurchaseOrder);
-            props.onClose();
+            setOpenCreate(false);
           }}
           color="warning"
           variant="contained"

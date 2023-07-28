@@ -1,12 +1,11 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import { Button, Grid } from "@mui/material";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { useCreatePurchaseOrder } from "../../../context/createPurchaseContext";
 
-interface Props {
-  setOpenCreate: Dispatch<SetStateAction<boolean>>;
-}
+const HeaderPurchaseOrders = () => {
+  const { setOpenCreate } = useCreatePurchaseOrder();
 
-const HeaderPurchaseOrders: FC<Props> = ({ setOpenCreate }) => {
   return (
     <Grid container alignItems="center">
       <Grid item xs={12} md={10}>

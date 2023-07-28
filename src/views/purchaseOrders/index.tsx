@@ -5,19 +5,13 @@ import HeaderPurchaseOrders from "./headerPurchaseOrders";
 import TablePurchaseOrders from "./tablePurchaseOrders";
 
 const PurchaseOrders = () => {
-  const [openCreate, setOpenCreate] = useState(false);
-
   return (
-    <div>
-      <HeaderPurchaseOrders setOpenCreate={setOpenCreate} />
+    <CreatePurchaseOrderProvider>
+      <HeaderPurchaseOrders />
       <TablePurchaseOrders />
-      <CreatePurchaseOrderProvider>
-        <CreatePurchaseOrder
-          open={openCreate}
-          onClose={() => setOpenCreate(false)}
-        />
-      </CreatePurchaseOrderProvider>
-    </div>
+      <CreatePurchaseOrder />
+    </CreatePurchaseOrderProvider>
+
   )
 }
 

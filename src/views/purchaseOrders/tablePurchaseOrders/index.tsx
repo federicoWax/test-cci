@@ -61,9 +61,6 @@ const TablePurchaseOrders = () => {
           </Stack>
         ),
       }}
-      onPaginationModelChange={({ }) => {
-
-      }}
       loading={loading}
       initialState={{
         pagination: { paginationModel: { pageSize: 10 } },
