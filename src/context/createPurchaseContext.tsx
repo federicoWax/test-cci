@@ -1,5 +1,5 @@
-import { createContext, createRef, Dispatch, ReactNode, RefObject, SetStateAction, useContext, useEffect, useState } from "react";
-import { OrderProduct, PurchaseOrder, PurchaseOrderInput } from "../interfaces/purchaseOrder";
+import { createContext, createRef, Dispatch, ReactNode, RefObject, SetStateAction, useContext, useState } from "react";
+import { OrderProduct, PurchaseOrder } from "../interfaces/purchaseOrder";
 import { initPurchaseOrder } from "../constans";
 import Alert from "../components/alert";
 import { useForm, UseFormReturn } from "react-hook-form";
@@ -48,7 +48,6 @@ export const CreatePurchaseOrderProvider = ({ children }: { children: ReactNode 
     defaultValues: purchaseOrder.products
   });
   const [addPurchaseOrder, { loading: savingMutation }] = useMutation<Response>(CREATE_PURCHASE_ORDER);
-  const { reset } = formOrderProducts;
 
   const onFinish = async (products: OrderProduct[]) => {
     if (savingMutation) return;

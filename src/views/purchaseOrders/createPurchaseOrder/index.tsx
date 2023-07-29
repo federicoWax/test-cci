@@ -1,4 +1,4 @@
-import { FC, forwardRef } from "react";
+import { forwardRef } from "react";
 import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Slide } from "@mui/material";
 import Stepper from "../../../components/stepper";
 import { TransitionProps } from "@mui/material/transitions";
@@ -18,8 +18,7 @@ const Transition = forwardRef(function Transition(
 });
 
 const CreatePurchaseOrder = () => {
-  const { activeStep, setActiveStep, refButtonCreateOrder, refButtonFinish, setPurchaseOrder, openCreate, setOpenCreate, formOrderProducts } = useCreatePurchaseOrder();
-  const { reset } = formOrderProducts!;
+  const { activeStep, setActiveStep, refButtonCreateOrder, refButtonFinish, setPurchaseOrder, openCreate, setOpenCreate } = useCreatePurchaseOrder();
 
   return (
     <Dialog open={openCreate} fullWidth maxWidth="lg" TransitionComponent={Transition}>
